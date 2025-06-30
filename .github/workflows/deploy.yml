@@ -1,0 +1,43 @@
+name: Deploy to Netlify & Notify Pentest Tools
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy-and-notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project (optional)
+        run: npm run build
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Deploy to Netlify
+        run: |
+          netlify deploy \
+            --dir=dist \
+            --prod \
+            --auth=${{ secrets.NETLIFY_TOKEN }} \
+            --site=${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Send target to Pentest Tools API
+        run: |
+          curl --request POST \
+            --url https://app.pentest-tools.com/api/v2/targets \
+            --header 'accept: application/json' \
+            --header 'authorization: Bearer ${{ secrets.PENTEST_TOKEN }}' \
+            --header 'Content-Type: application/json' \
+            --data '{
+              "name": "https://aray.ma",
+              "description": "Target added after successful deployment"
+            }'
