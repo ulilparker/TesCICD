@@ -30,14 +30,15 @@ jobs:
             --auth=${{ secrets.NETLIFY_TOKEN }} \
             --site=${{ secrets.NETLIFY_SITE_ID }}
 
-      - name: Send target to Pentest Tools API
+      - name: Run Website Scanner on Target
         run: |
           curl --request POST \
-            --url https://app.pentest-tools.com/api/v2/targets \
+            --url https://app.pentest-tools.com/api/v2/scans \
             --header 'accept: application/json' \
             --header 'authorization: Bearer ${{ secrets.PENTEST_TOKEN }}' \
             --header 'Content-Type: application/json' \
             --data '{
-              "name": "https://aray.ma",
-              "description": "Target added after successful deployment"
+              "tool_id": 170,
+              "target_name": "https://aray.ma"
             }'
+
