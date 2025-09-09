@@ -33,12 +33,17 @@ jobs:
       - name: Run Website Scanner on Target
         run: |
           curl --request POST \
-            --url https://app.pentest-tools.com/api/v2/scans \
+            --url http://143.198.6.54:8200/api/v1/vulture/scans/start-ci-cd \
             --header 'accept: application/json' \
-            --header 'authorization: Bearer ${{ secrets.PENTEST_TOKEN }}' \
+            --header 'authorization: ${{ secrets.TOKEN_VULTURE }}' \
             --header 'Content-Type: application/json' \
             --data '{
               "tool_id": 170,
-              "target_name": "https://aray.ma"
+              "target_name": "https://www.hackthissite.org/",
+              "tool_params": {
+                "scan_type": "deep"
+              },
+              "description": "Deployed to Netlify",
+              "recipient_emails": ["ulilbinabdul@gmail.com"],
+              "recipient_whatsapp": ["085718741537"]
             }'
-
